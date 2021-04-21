@@ -27,22 +27,22 @@
   ],
   "imagesAdvancedClass": [
 
-    { "Assassin": "https://i.gyazo.com/a277e906ee81ea6bce7ba8e84b51eb34.png" },
-    { "Shadow": "https://i.gyazo.com/56da4f7b2eddd9126fb1a9f6e536c624.png" },
-    { "Juggernaut": "https://i.gyazo.com/f5955d92bff72a14e8c4e67309ca6cb3.png" },
-    { "Guardian": "https://i.gyazo.com/3658a4a519ef6b10befe0bf5896c3b23.png" },
-    { "Marauder": "https://i.gyazo.com/b57d2e70c7dd6f59a5bfd7234d5c6d7f.png" },
-    { "Sentinel": "https://i.gyazo.com/32254aa5d82c59a6dc6328b0539674a6.png" },
-    { "Sorcerer": "https://i.gyazo.com/168cd0c4d39fd8345567695cb38aac2a.png" },
-    { "Sage": "https://i.gyazo.com/03168256f6b3d9fb8dc7ad2c79002ba4.png" },
-    { "Powertech": "https://i.gyazo.com/4fb8dcab028c2ca7e6bece06e1378cd5.png" },
-    { "Vanguard": "https://i.gyazo.com/dd8028adc4114a80042bcccd50440811.png" },
-    { "Mercenary": "https://i.gyazo.com/4d029d70970e8ca4695a37f0a0d76c71.png" },
-    { "Commando": "https://i.gyazo.com/6b74e5df47ec68d2af0c66b5aea0f081.png" },
-    { "Sniper": "https://i.gyazo.com/f88a62b65d5cd7e6e219a77ec1a5b343.png" },
-    { "Gunslinger": "https://i.gyazo.com/05e071d37b7251abffe2eee0bc3b0886.png" },
-    { "Operative": "https://i.gyazo.com/c1b8f716c6a4233eedee7e10dab0ef29.png" },
-    { "Scoundrel": "https://i.gyazo.com/5b5cfb662529805dd89ef7ddf50378cc.png" }
+    { "Assassin": "https://i.gyazo.com/a277e906ee81ea6bce7ba8e84b51eb34.png" ,
+     "Shadow": "https://i.gyazo.com/56da4f7b2eddd9126fb1a9f6e536c624.png" ,
+     "Juggernaut": "https://i.gyazo.com/f5955d92bff72a14e8c4e67309ca6cb3.png" ,
+     "Guardian": "https://i.gyazo.com/3658a4a519ef6b10befe0bf5896c3b23.png" ,
+     "Marauder": "https://i.gyazo.com/b57d2e70c7dd6f59a5bfd7234d5c6d7f.png" ,
+     "Sentinel": "https://i.gyazo.com/32254aa5d82c59a6dc6328b0539674a6.png" ,
+     "Sorcerer": "https://i.gyazo.com/168cd0c4d39fd8345567695cb38aac2a.png" ,
+     "Sage": "https://i.gyazo.com/03168256f6b3d9fb8dc7ad2c79002ba4.png" ,
+     "Powertech": "https://i.gyazo.com/4fb8dcab028c2ca7e6bece06e1378cd5.png" ,
+     "Vanguard": "https://i.gyazo.com/dd8028adc4114a80042bcccd50440811.png" ,
+     "Mercenary": "https://i.gyazo.com/4d029d70970e8ca4695a37f0a0d76c71.png" ,
+     "Commando": "https://i.gyazo.com/6b74e5df47ec68d2af0c66b5aea0f081.png" ,
+     "Sniper": "https://i.gyazo.com/f88a62b65d5cd7e6e219a77ec1a5b343.png" ,
+     "Gunslinger": "https://i.gyazo.com/05e071d37b7251abffe2eee0bc3b0886.png" ,
+     "Operative": "https://i.gyazo.com/c1b8f716c6a4233eedee7e10dab0ef29.png" ,
+     "Scoundrel": "https://i.gyazo.com/5b5cfb662529805dd89ef7ddf50378cc.png" }
   ]
 
 }
