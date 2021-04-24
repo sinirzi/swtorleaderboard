@@ -1,12 +1,25 @@
 const fetch = require('node-fetch');
 const Discord = require('discord.js');
+const fonks = require('./fonks');
 const QuickChart = require('quickchart-js');
+const season = process.env.season;
+const imagesUrl = 'https://raw.githubusercontent.com/sinirzi/swtorleaderboard/main/images.json';
+const searchUrl = 'https://www.swtor.com/lb/search/';
+const getUrl = 'https://www.swtor.com/lb/get/';
+const footerUrl = 'https://static-cdn.jtvnw.net/emoticons/v2/435279/default/dark/1.0';
+const charUrl = 'http://www.swtor.com/leaderboards/character/';
+const impLogo = 'http://pm1.narvii.com/6699/a004bf79c862b6c01070ce8a44551c9d9c3d908f_00.jpg';
+const repLogo = 'https://images.alphacoders.com/300/thumb-1920-300681.jpg';
+const boardUrl = 'http://www.swtor.com/leaderboards/';
+const topUrl = 'http://www.swtor.com/lb/top?'
 
 module.exports = {
 
     name: '.summary',
 
-    execute(msg, args) {
+   async execute(msg, args) {
+    const srEmoji = '1️⃣';
+    const trEmoji = '2️⃣';
         var objectArrayValues;
         var summary;
         var summaryJugg;
@@ -25,12 +38,35 @@ module.exports = {
         var summarySlinger;
         var summaryOper;
         var summarySco;
-        var summarySplit;
+        var summaryClass;
         var summaryString;
 
-        if (args[0] == 'sr' && args.length === 1) {
+        const chooseEmbed = new Discord.MessageEmbed()
+            .setColor('0099ff')
+                        .setTitle('Ranked Warzone Arena Leaderboards')
+                        .setDescription(''
+                        + srEmoji+' SR  \u200B\u200B\u200B\u200B\u200B\u200B'
+                            +  trEmoji+ 'TR')
+                            .setFooter('Developed by Furkai#0331 ', '' + footerUrl + '');
+if(args[0]===undefined)
+        msg.channel.send(chooseEmbed).then(chooseEmbed =>{
+                 
+            chooseEmbed.react(srEmoji).then(() => chooseEmbed.react(trEmoji));
+           
+   
+           const filter = (reaction, user) => {
+               return [srEmoji, trEmoji].includes(reaction.emoji.name) && user.id === msg.author.id;
+           };
+           
+           const collector = chooseEmbed.createReactionCollector(filter,{time:20000});
+           
+           collector.on('collect', (reaction, user) => {
+  
+           
+
+       
             fetch('http://www.swtor.com/lb/top?season=13').then(response => response.json()).then(file => {
-                summary = summaryClassed(file);
+                summary = fonks.summaryClassed(file);
                 summaryJugg = Object.values(summary[0]);
                 summaryMara = Object.values(summary[1]);
                 summarySin = Object.values(summary[2]);
@@ -39,16 +75,16 @@ module.exports = {
                 summaryMerc = Object.values(summary[5]);
                 summarySniper = Object.values(summary[6]);
                 summaryOper = Object.values(summary[7]);
-                summaryString = summaryStringed(summaryJugg, summaryMara, summarySin, summarySorc, summaryPt, summaryMerc, summarySniper, summaryOper);
-                summaryEmbed();
+                summaryString = fonks.summaryStringed(summaryJugg, summaryMara, summarySin, summarySorc, summaryPt, summaryMerc, summarySniper, summaryOper);
+                summaryClass= fonks.summaryEmbed(summaryString,true);
+                if(reaction.emoji.name==srEmoji){
+                    chooseEmbed.edit(summaryClass)
+                   reaction.users.remove(user.id);
+                   }
 
-            });
-        }
 
-
-        else if (args[0] == 'tr' && args.length === 1) {
-            fetch('http://www.swtor.com/lb/top?group=true&season=13').then(response => response.json()).then(file => {
-                summary = summaryClassed(file);
+            }).then(response =>fetch('http://www.swtor.com/lb/top?group=true&season=13')).then(response => response.json()).then(file => {
+                summary = fonks.summaryClassed(file);
                 summaryJugg = Object.values(summary[0]);
                 summaryMara = Object.values(summary[1]);
                 summarySin = Object.values(summary[2]);
@@ -57,11 +93,23 @@ module.exports = {
                 summaryMerc = Object.values(summary[5]);
                 summarySniper = Object.values(summary[6]);
                 summaryOper = Object.values(summary[7]);
-                summaryString = summaryStringed(summaryJugg, summaryMara, summarySin, summarySorc, summaryPt, summaryMerc, summarySniper, summaryOper);
-                summaryEmbed();
+                summaryString = fonks.summaryStringed(summaryJugg, summaryMara, summarySin, summarySorc, summaryPt, summaryMerc, summarySniper, summaryOper);
+                summaryClass=fonks.summaryEmbed(summaryString,false);
+                if(reaction.emoji.name==trEmoji){
+                    chooseEmbed.edit(summaryClass)
+                   reaction.users.remove(user.id);
+    
+                   }
+
 
             });
-        }
+            });
+            collector.on('end', (reaction, user) => {
+                chooseEmbed.reactions.removeAll()
+               });
+
+        });
+        
 
         if (args[0] == 'sr' && args[1] == 'sin' || args[1] === 'Asssassin' || args[1] === 'assassin'  || args[1] === 'Shadow' || args[1] === 'shadow') {
     fetch('http://www.swtor.com/lb/data?page=1&class=shadow-assassin&column=pvp_ranked_solo&season=13').then(response => response.json()).then(file => {
@@ -71,14 +119,15 @@ module.exports = {
         if (args[1] === 'sin' || args[1] === 'Assassin' || args[1] === 'assassin') {
 
 
-            summaryString = summaryClassStringed(summarySin);
-            summaryClassEmbed('sin');
+            summaryString = fonks.summaryClassStringed(summarySin);
+            summaryString= fonks.summaryClassEmbed('sin',summaryString);
+            msg.reply(summaryString);
         }
         else {
-            summaryString = summaryClassStringed(summaryShadow);
-            summaryClassEmbed('Shadow');
+            summaryString = fonks.summaryClassStringed(summaryShadow);
+            summaryString=  fonks.summaryClassEmbed('Shadow',summaryString);
+            msg.reply(summaryString);
         }
-        console.log(summaryString.length)
 
 
     });
@@ -91,12 +140,14 @@ module.exports = {
                 if (args[1] === 'sorc' || args[1] === 'sorcerer' || args[1] === 'Sorcerer') {
 
 
-                    summaryString = summaryClassStringed(summarySorc);
-                    summaryClassEmbed('Sorcerer');
+                    summaryString = fonks.summaryClassStringed(summarySorc);
+                    summaryString=    fonks.summaryClassEmbed('Sorcerer',summaryString);
+                    msg.reply(summaryString);
                 }
                 else {
-                    summaryString = summaryClassStringed(summarySage);
-                    summaryClassEmbed('Sage');
+                    summaryString = fonks.summaryClassStringed(summarySage);
+                    summaryString=    fonks.summaryClassEmbed('Sage',summaryString);
+                    msg.reply(summaryString);
                 }
 
 
@@ -110,12 +161,14 @@ module.exports = {
                 if (args[1] === 'merc' || args[1] === 'mercenary' || args[1] === 'Mercenary') {
 
 
-                    summaryString = summaryClassStringed(summaryMerc);
-                    summaryClassEmbed('Merc');
+                    summaryString = fonks.summaryClassStringed(summaryMerc);
+                    summaryString=   fonks.summaryClassEmbed('Merc',summaryString);
+                    msg.reply(summaryString);
                 }
                 else {
-                    summaryString = summaryClassStringed(summaryCommando);
-                    summaryClassEmbed('Commando');
+                    summaryString = fonks.summaryClassStringed(summaryCommando);
+                    summaryString=   fonks.summaryClassEmbed('Commando',summaryString);
+                    msg.reply(summaryString);
                 }
 
 
@@ -129,12 +182,14 @@ module.exports = {
                 if (args[1] === 'jugg' || args[1] === 'juggernaut') {
 
 
-                    summaryString = summaryClassStringed(summaryJugg);
-                    summaryClassEmbed('Juggernaut');
+                    summaryString = fonks.summaryClassStringed(summaryJugg);
+                    summaryString= fonks.summaryClassEmbed('Juggernaut',summaryString);
+                    msg.reply(summaryString);
                 }
                 else {
-                    summaryString = summaryClassStringed(summaryGuardian);
-                    summaryClassEmbed('Guardian');
+                    summaryString = fonks.summaryClassStringed(summaryGuardian);
+                    summaryString=   fonks.summaryClassEmbed('Guardian',summaryString);
+                    msg.reply(summaryString);
                 }
 
 
@@ -148,12 +203,14 @@ module.exports = {
                 if (args[1] === 'mara' || args[1] === 'marauder') {
 
 
-                    summaryString = summaryClassStringed(summaryMara);
-                    summaryClassEmbed('Marauder');
+                    summaryString = fonks.summaryClassStringed(summaryMara);
+                    summaryString=    fonks.summaryClassEmbed('Marauder',summaryString);
+                    msg.reply(summaryString);
                 }
                 else {
-                    summaryString = summaryClassStringed(summarySent);
-                    summaryClassEmbed('Sentinel');
+                    summaryString = fonks.summaryClassStringed(summarySent);
+                    summaryString=    fonks.summaryClassEmbed('Sentinel',summaryString);
+                    msg.reply(summaryString);
                 }
 
 
@@ -167,12 +224,14 @@ module.exports = {
                 if (args[1] === 'vg' || args[1] === 'vanguard') {
 
 
-                    summaryString = summaryClassStringed(summaryVg);
-                    summaryClassEmbed('Vanguard');
+                    summaryString = fonks.summaryClassStringed(summaryVg);
+                    summaryString=  fonks.summaryClassEmbed('Vanguard',summaryString);
+                    msg.reply(summaryString);
                 }
                 else {
-                    summaryString = summaryClassStringed(summaryPt);
-                    summaryClassEmbed('Powertech');
+                    summaryString = fonks.summaryClassStringed(summaryPt);
+                    summaryString=    fonks.summaryClassEmbed('Powertech',summaryString);
+                    msg.reply(summaryString);
                 }
 
 
@@ -186,12 +245,14 @@ module.exports = {
                 if (args[1] === 'sniper' || args[1] === 'Sniper') {
 
 
-                    summaryString = summaryClassStringed(summarySniper);
-                    summaryClassEmbed('Sniper');
+                    summaryString = fonks.summaryClassStringed(summarySniper);
+                    summaryString=   fonks.summaryClassEmbed('Sniper',summaryString);
+                    msg.reply(summaryString);
                 }
                 else {
-                    summaryString = summaryClassStringed(summarySlinger);
-                    summaryClassEmbed('Gunslinger');
+                    summaryString = fonks.summaryClassStringed(summarySlinger);
+                    summaryString=  fonks.summaryClassEmbed('Gunslinger',summaryString);
+                    msg.reply(summaryString);
                 }
 
 
@@ -205,246 +266,23 @@ module.exports = {
                 if (args[1] === 'oper' || args[1] === 'operative') {
 
 
-                    summaryString = summaryClassStringed(summaryOper);
-                    summaryClassEmbed('Operative');
+                    summaryString = fonks.summaryClassStringed(summaryOper);
+                    summaryString=    fonks.summaryClassEmbed('Operative',summaryString);
+                    msg.reply(summaryString);
                 }
                 else {
-                    summaryString = summaryClassStringed(summarySco);
-                    summaryClassEmbed('Scoundrel');
+                    summaryString = fonks.summaryClassStringed(summarySco);
+                    summaryString=     fonks.summaryClassEmbed('Scoundrel',summaryString);
+                    msg.reply(summaryString);
                 }
 
 
             });
         }
 
-        function summaryClassed(summary){
-            var summaryLeaders = [];
-            var summaryLeadersNames = [];
-            var summaryLeadersRatings = [];
+        
+        
 
-            for (i = 0; i < summary.length; i++) {
-                summaryLeaders[i] = summary[i].leaders;
-                summaryLeadersNames[i] = summaryLeaders[i].char_name;
-                summaryLeadersRatings[i] = summaryLeaders[i].rating;
-            }
-            return summaryLeaders;
-        }
-        function summarySplitted(summary) {
-            const n = 5
-            const result = [[], [], [],[],[]] //we create it, then we'll fill it
-
-            const wordsPerLine = Math.ceil(summary.length / n)
-
-            for (let line = 0; line < n; line++) {
-                for (let i = 0; i < wordsPerLine; i++) {
-                    const value = summary[i + line * wordsPerLine]
-                    if (!value) continue //avoid adding "undefined" values
-                    result[line].push(value)
-                }
-            }
-            return result;
-        }
-        function summaryClassStringed(summary1) {
-            var String = '';
-            for (i = 0; i < summary1.length; i++) {
-                
-                if ((summary1[i].char_name).length < 11) {
-                    summary1[i].char_name += ' '.repeat(11 - (summary1[i].char_name).length)
-                }
-                else if ((summary1[i].char_name).length > 11) {
-                    summary1[i].char_name = (summary1[i].char_name).slice(0, 11);
-                    summary1[i].char_name = (summary1[i].char_name).substr(0, 8);
-                    summary1[i].char_name += '...';
-                }
-
-
-                    String += summary1[i].char_name + '  ' + summary1[i].rating + '  ' +summary1[i].shard_name + '\n';
-            }
-            return String;
-        }
-        function summaryStringed(summary1, summary2, summary3, summary4, summary5, summary6, summary7, summary8) {
-            var String1 = '';
-            var String2 = '';
-            var String3 = '';
-            var String4 = '';
-            var String5 = '';
-            var String6 = '';
-            var String7 = '';
-            var String8 = '';
-            for (i = 0; i < summary1.length; i++) {
-                if ((summary1[i].char_name).length < 11) {
-                    summary1[i].char_name += ' '.repeat(11 - (summary1[i].char_name).length)
-                }
-                else if ((summary1[i].char_name).length > 11) {
-                    summary1[i].char_name = (summary1[i].char_name).slice(0, 11);
-                    summary1[i].char_name = (summary1[i].char_name).substr(0, 8);
-                    summary1[i].char_name += '...';
-                }
-               /* if ((summary1[i].class_name).length < 10) {
-                    summary1[i].rating += ' '.repeat(10 - (summary1[i].class_name).length)
-                } */
-
-                String1 += summary1[i].char_name + '  ' + summary1[i].rating + '  ' + summary1[i].class_name + '\n';
-            }
-            for (i = 0; i < summary2.length; i++) {
-                if ((summary2[i].char_name).length < 11) {
-                    summary2[i].char_name += ' '.repeat(11 - (summary2[i].char_name).length)
-                }
-                else if ((summary2[i].char_name).length > 11) {
-                    summary2[i].char_name = (summary2[i].char_name).slice(0, 11);
-                    summary2[i].char_name = (summary2[i].char_name).substr(0, 8);
-                    summary2[i].char_name += '...';
-                }
-                String2 += summary2[i].char_name + '  ' + summary2[i].rating + '  ' + summary2[i].class_name + '\n';
-            }
-            for (i = 0; i < summary3.length; i++) {
-                if ((summary3[i].char_name).length < 11) {
-                    summary3[i].char_name += ' '.repeat(11 - (summary3[i].char_name).length)
-                }
-                else if ((summary3[i].char_name).length > 11) {
-                    summary3[i].char_name = (summary3[i].char_name).slice(0, 11);
-                    summary3[i].char_name = (summary3[i].char_name).substr(0, 8);
-                    summary3[i].char_name += '...';
-                }
-                String3 += summary3[i].char_name + '  ' + summary3[i].rating + '  ' + summary3[i].class_name +'\n';
-            }
-            for (i = 0; i < summary4.length; i++) {
-                if ((summary4[i].char_name).length < 11) {
-                    summary4[i].char_name += ' '.repeat(11 - (summary4[i].char_name).length)
-                }
-                else if ((summary4[i].char_name).length > 11) {
-                    summary4[i].char_name = (summary4[i].char_name).slice(0, 11);
-                    summary4[i].char_name = (summary4[i].char_name).substr(0, 8);
-                    summary4[i].char_name += '...';
-                }
-                String4 += summary4[i].char_name + '  ' + summary4[i].rating + '  ' + summary4[i].class_name +'\n';
-            }
-            for (i = 0; i < summary5.length; i++) {
-                if ((summary5[i].char_name).length < 11) {
-                    summary5[i].char_name += ' '.repeat(11 - (summary5[i].char_name).length)
-                }
-                else if ((summary5[i].char_name).length > 11) {
-                    summary5[i].char_name = (summary5[i].char_name).slice(0, 11);
-                    summary5[i].char_name = (summary5[i].char_name).substr(0, 8);
-                    summary5[i].char_name += '...';
-                }
-                String5 += summary5[i].char_name + '  ' + summary5[i].rating + '  ' + summary5[i].class_name + '\n';
-            }
-            for (i = 0; i < summary6.length; i++) {
-                if ((summary6[i].char_name).length < 11) {
-                    summary6[i].char_name += ' '.repeat(11 - (summary6[i].char_name).length)
-                }
-                else if ((summary6[i].char_name).length > 11) {
-                    summary6[i].char_name = (summary6[i].char_name).slice(0, 11);
-                    summary6[i].char_name = (summary6[i].char_name).substr(0, 8);
-                    summary6[i].char_name += '...';
-                }
-                String6 += summary6[i].char_name + '  ' + summary6[i].rating + '  ' + summary6[i].class_name +'\n';
-            }
-            for (i = 0; i < summary7.length; i++) {
-                if ((summary7[i].char_name).length < 11) {
-                    summary7[i].char_name += ' '.repeat(11 - (summary7[i].char_name).length)
-                }
-                else if ((summary7[i].char_name).length > 11) {
-                    summary7[i].char_name = (summary7[i].char_name).slice(0, 11);
-                    summary7[i].char_name = (summary7[i].char_name).substr(0, 8);
-                    summary7[i].char_name += '...';
-                }
-                String7 += summary7[i].char_name + '  ' + summary7[i].rating + '  ' + summary7[i].class_name + '\n';
-            }
-            for (i = 0; i < summary8.length; i++) {
-                if ((summary8[i].char_name).length < 11) {
-                    summary8[i].char_name += ' '.repeat(11 - (summary8[i].char_name).length)
-                }
-                else if ((summary8[i].char_name).length > 11) {
-                    summary8[i].char_name = (summary8[i].char_name).slice(0, 11);
-                    summary8[i].char_name = (summary8[i].char_name).substr(0, 8);
-                    summary8[i].char_name += '...';
-                }
-                String8 += summary8[i].char_name + '  ' + summary8[i].rating + '  ' + summary8[i].class_name +'\n';
-            }
-            return [String1, String2, String3, String4, String5, String6, String7, String8];
-
-        }
-        function summaryClassEmbed(className) {
-
-            switch (className) {
-                case 'sin':
-                    msg.reply('ASSASSIN`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Shadow':
-                    msg.reply('Shadow`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Marauder':
-                    msg.reply('Marauder`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Sentinel':
-                    msg.reply('Sentinel`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Sorcerer':
-                    msg.reply('Sorcerer`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Sage':
-                    msg.reply('Sage`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Powertech':
-                    msg.reply('Powertech`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Vanguard':
-                    msg.reply('Vanguard`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Commando':
-                    msg.reply('Commando`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Mercenary':
-                    msg.reply('Mercenary`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Gunslinger':
-                    msg.reply('Gunslinger`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Sniper':
-                    msg.reply('Sniper`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Scoundrel':
-                    msg.reply('Scoundrel`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Operative':
-                    msg.reply('Operative`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Guardian':
-                    msg.reply('Guardian`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-                case 'Juggernaut':
-                    msg.reply('Juggernaut`s OF FIRST PAGE \n```' + summaryString + '```');
-                    break;
-            }
-        }
-        function summaryEmbed() {
-            const summEmbed = new Discord.MessageEmbed()
-              //  .setImage('https://wallpaperaccess.com/full/3004797.jpg')
-                .setColor('#0099ff')
-                // .setImage('https://www.vhv.rs/dpng/d/502-5023215_sith-logo-png-www-star-wars-old-republic.png')
-                .setTimestamp()
-                .setFooter('Furkai#0331 for feedbacks,suggestions and bugs', 'https://static-cdn.jtvnw.net/emoticons/v2/435279/default/dark/1.0')
-                .addFields(
-                    { name: 'GUARDIAN \u200B / \u200B JUGGERNAUT', value: '```' + summaryString[0]+ '```', inline: true },
-                    { name: 'SENTINEL \u200B / \u200B MARAUDER', value: '```' + summaryString[1]+ '```', inline: true },
-                    { name: '\u200B', value: '\u200B' },
-
-                    { name: 'SHADOW \u200B /  \u200B ASSASSIN', value: '```' + summaryString[2]+ '```', inline: true },
-                    { name: 'SAGE \u200B / \u200B SORCERER', value: '```' + summaryString[3]+ '```', inline: true },
-                    { name: '\u200B', value: '\u200B' },
-
-                    { name: 'VANGUARD \u200B / \u200B POWERTECH', value: '```' + summaryString[4]  + '```', inline: true },
-                    { name: 'COMMANDO\u200B  / \u200B  MERCENARY', value: '```' + summaryString[5] + '```', inline: true },
-                    { name: '\u200B', value: '\u200B' },
-
-                    { name: 'GUNSLINGER \u200B / \u200B SNIPER', value: '```' + summaryString[6]  + '```', inline: true },
-                    { name: 'SCOUNDREL \u200B / \u200B OPERATIVE', value: '```' + summaryString[7]  + '```', inline: true },
-                );
-
-            msg.reply(summEmbed);
-        }
 
 
 

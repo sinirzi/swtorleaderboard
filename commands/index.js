@@ -7,4 +7,5 @@ module.exports = {
     Top3tr: require('./top3tr'),
     history: require('./history'),
     test: require('./test'),
+    reactions: require('./reactions'),
 };

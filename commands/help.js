@@ -8,7 +8,7 @@ module.exports = {
     name: '.help',
 
     execute(msg, args) {
-        switch (args[0]) {
+      /*  switch (args[0]) {
             case undefined:
                 embedHelp();
                 break;
@@ -21,8 +21,7 @@ module.exports = {
             case 'summary':
                 embedHelpSummary();
                 break;
-        }
-        function embedHelp() {
+        }*/
             const embedCommands = new Discord.MessageEmbed()
                 .setTitle('BOT COMMANDS')
                 .setTimestamp()
@@ -33,9 +32,9 @@ module.exports = {
 
 
                 .addFields(
-                    { name: '<:one:821889136947363861> search', value: '```.help search ```', inline: true },
-                    { name: '<:two:821889263024472094> top3', value: '```.help top3  ```', inline: true },
-                    { name: '<:three:821889275724431360> summary', value: '```.help summmary ```', inline: true },
+                    { name: '<:one:821889136947363861> search', value: '```.sr CharacterName ServerName (Example: .sr Furkai dm)\n ```', inline: true },
+                    { name: '<:two:821889263024472094> top3', value: '```brings the real top3s of each advanced class(160wins and above)\n.top3sr/.top3tr AdvancedClassName (Example: .top3sr merc)\n  \n .top3sr/.top3tr all : summary style real top3s of all advanced classes  ```', inline: true },
+                    { name: '<:three:821889275724431360> summary', value: '```.summary ```', inline: true },
                 );
             msg.reply(embedCommands);
 
@@ -45,10 +44,10 @@ module.exports = {
 
 
 
-        }
+        
 
         function embedHelpSr() {
-            msg.reply('```.sr/tr CharacterName ServerName (Example: .sr Furkai dm)\n ServerName: Darth Malgus,dm,DM,Star Forge,sf,SF,Satele Shan,ss,SS,The Leviathan,tl,TL ```')
+            msg.reply('```.sr CharacterName ServerName (Example: .sr Furkai dm)\n  ```')
         }
 
         function embedHelpTop() {

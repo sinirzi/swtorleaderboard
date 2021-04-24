@@ -1,7 +1,10 @@
 const fetch = require('node-fetch');
 const Discord = require('discord.js');
 const utf8 = require('utf8');
-
+const season = process.env.season;
+const searchUrl = 'https://www.swtor.com/lb/search/';
+const getUrl = 'https://www.swtor.com/lb/get/';
+const footerUrl = 'https://static-cdn.jtvnw.net/emoticons/v2/435279/default/dark/1.0';
 module.exports = {
 
     name: '.top3tr',
@@ -47,7 +50,7 @@ module.exports = {
 
         switch (args[0]) {
             case 'all':
-                fetch('http://www.swtor.com/lb/data?page=1&class=shadow-assassin&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=shadow-assassin&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     saArrayDataOfObject = Object.values(file.data);
                     topThreeSa = calcTopThree(saArrayDataOfObject);
                     topThreeSin = topThreeSa.filter((topThree => topThree.class_name === 'Assassin'));
@@ -57,7 +60,7 @@ module.exports = {
                     topThreeSa = topThreeSin.concat(topThreeShadow);
                     topThreeSa = calcTopThree(topThreeSa);
                    topThreeSa = summaryStringed(topThreeSa);
-                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=sage-sorcerer&column=pvp_ranked_group&season=13')).then(response => response.json()).then(file => {
+                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=sage-sorcerer&column=pvp_ranked_group&season=' + season +'')).then(response => response.json()).then(file => {
                     ssArrayDataOfObject = Object.values(file.data);
                     topThreeSs = calcTopThree(ssArrayDataOfObject);
 
@@ -67,12 +70,11 @@ module.exports = {
                     topThreeSage = topThreeSage.filter((topThree, index) => index < 3);
                     topThreeSs = topThreeSorc.concat(topThreeSage);
                     topThreeSs = calcTopThree(topThreeSs);
-
                     topThreeSs = summaryStringed(topThreeSs);
                     
 
 
-                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=vanguard-powertech&column=pvp_ranked_group&season=13')).then(response => response.json()).then(file => {
+                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=vanguard-powertech&column=pvp_ranked_group&season=' + season +'')).then(response => response.json()).then(file => {
                     vpArrayDataOfObject = Object.values(file.data);
                     topThreeVp = calcTopThree(vpArrayDataOfObject);
 
@@ -86,7 +88,7 @@ module.exports = {
                     topThreeVp = summaryStringed(topThreeVp);
                     
 
-                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=comando-mercenary&column=pvp_ranked_group&season=13')).then(response => response.json()).then(file => {
+                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=comando-mercenary&column=pvp_ranked_group&season=' + season +'')).then(response => response.json()).then(file => {
                     cmArrayDataOfObject = Object.values(file.data);
                     topThreeCm = calcTopThree(cmArrayDataOfObject);
 
@@ -100,7 +102,7 @@ module.exports = {
                     topThreeCm = summaryStringed(topThreeCm);
                    
 
-                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=gunslinger-sniper&column=pvp_ranked_group&season=13')).then(response => response.json()).then(file => {
+                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=gunslinger-sniper&column=pvp_ranked_group&season=' + season +'')).then(response => response.json()).then(file => {
                     gsArrayDataOfObject = Object.values(file.data);
                     topThreeGs = calcTopThree(gsArrayDataOfObject);
 
@@ -113,7 +115,7 @@ module.exports = {
 
                     topThreeGs = summaryStringed(topThreeGs);
                     
-                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=scoundrel-operative&column=pvp_ranked_group&season=13')).then(response => response.json()).then(file => {
+                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=scoundrel-operative&column=pvp_ranked_group&season=' + season +'')).then(response => response.json()).then(file => {
                     soArrayDataOfObject = Object.values(file.data);
                     topThreeSo = calcTopThree(soArrayDataOfObject);
 
@@ -126,7 +128,7 @@ module.exports = {
 
                     topThreeSo = summaryStringed(topThreeSo);
                     
-                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=sentinel-marauder&column=pvp_ranked_group&season=13')).then(response => response.json()).then(file => {
+                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=sentinel-marauder&column=pvp_ranked_group&season=' + season +'')).then(response => response.json()).then(file => {
                     smArrayDataOfObject = Object.values(file.data);
                     topThreeSm = calcTopThree(smArrayDataOfObject);
 
@@ -139,7 +141,7 @@ module.exports = {
 
                     topThreeSm = summaryStringed(topThreeSm);
                     
-                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=guardian-juggernaut&column=pvp_ranked_group&season=13')).then(response => response.json()).then(file => {
+                }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=guardian-juggernaut&column=pvp_ranked_group&season=' + season +'')).then(response => response.json()).then(file => {
                     gjArrayDataOfObject = Object.values(file.data);
                     topThreeGj = calcTopThree(gjArrayDataOfObject);
 
@@ -156,7 +158,7 @@ module.exports = {
                 break;
 
             case 'shadow':
-                fetch('http://www.swtor.com/lb/data?page=1&class=shadow-assassin&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=shadow-assassin&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Shadow'));
@@ -167,7 +169,7 @@ module.exports = {
                 break;
             case 'sin':
             case 'assassin':
-                fetch('http://www.swtor.com/lb/data?page=1&class=shadow-assassin&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=shadow-assassin&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Assassin'));
@@ -178,7 +180,7 @@ module.exports = {
                 });
                 break;
             case 'sage':
-                fetch('http://www.swtor.com/lb/data?page=1&class=sage-sorcerer&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=sage-sorcerer&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Sage'));
@@ -188,7 +190,7 @@ module.exports = {
                 break;
             case 'sorc':
             case 'sorcerer':
-                fetch('http://www.swtor.com/lb/data?page=1&class=sage-sorcerer&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=sage-sorcerer&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Sorcerer'));
@@ -198,7 +200,7 @@ module.exports = {
                 break;
             case 'vg':
             case 'vanguard':
-                fetch('http://www.swtor.com/lb/data?page=1&class=vanguard-powertech&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=vanguard-powertech&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Vanguard'));
@@ -208,7 +210,7 @@ module.exports = {
                 break;
             case 'pt':
             case 'powertech':
-                fetch('http://www.swtor.com/lb/data?page=1&class=vanguard-powertech&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=vanguard-powertech&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Powertech'));
@@ -218,7 +220,7 @@ module.exports = {
                 break;
             case 'mando':
             case 'commando':
-                fetch('http://www.swtor.com/lb/data?page=1&class=comando-mercenary&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=comando-mercenary&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Commando'));
@@ -228,7 +230,7 @@ module.exports = {
                 break;
             case 'merc':
             case 'mercenary':
-                fetch('http://www.swtor.com/lb/data?page=1&class=comando-mercenary&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=comando-mercenary&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Mercenary'));
@@ -238,7 +240,7 @@ module.exports = {
                 break;
             case 'slinger':
             case 'gunslinger':
-                fetch('http://www.swtor.com/lb/data?page=1&class=gunslinger-sniper&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=gunslinger-sniper&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Gunslinger'));
@@ -248,7 +250,7 @@ module.exports = {
                 break;
             case 'snip':
             case 'sniper':
-                fetch('http://www.swtor.com/lb/data?page=1&class=gunslinger-sniper&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=gunslinger-sniper&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Sniper'));
@@ -258,7 +260,7 @@ module.exports = {
                 break;
             case 'sco':
             case 'scoundrel':
-                fetch('http://www.swtor.com/lb/data?page=1&class=scoundrel-operative&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=scoundrel-operative&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Scoundrel'));
@@ -268,7 +270,7 @@ module.exports = {
                 break;
             case 'oper':
             case 'operative':
-                fetch('http://www.swtor.com/lb/data?page=1&class=scoundrel-operative&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=scoundrel-operative&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Operative'));
@@ -278,7 +280,7 @@ module.exports = {
                 break;
             case 'sent':
             case 'sentinel':
-                fetch('http://www.swtor.com/lb/data?page=1&class=sentinel-marauder&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=sentinel-marauder&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Sentinel'));
@@ -288,7 +290,7 @@ module.exports = {
                 break;
             case 'mara':
             case 'marauder':
-                fetch('http://www.swtor.com/lb/data?page=1&class=sentinel-marauder&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=sentinel-marauder&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Marauder'));
@@ -297,7 +299,7 @@ module.exports = {
                 });
                 break;
             case 'guardian':
-                fetch('http://www.swtor.com/lb/data?page=1&class=guardian-juggernaut&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=guardian-juggernaut&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Guardian'));
@@ -307,7 +309,7 @@ module.exports = {
                 break;
             case 'jugg':
             case 'juggernaut':
-                fetch('http://www.swtor.com/lb/data?page=1&class=guardian-juggernaut&column=pvp_ranked_group&season=13').then(response => response.json()).then(file => {
+                fetch('http://www.swtor.com/lb/data?page=1&class=guardian-juggernaut&column=pvp_ranked_group&season=' + season +'').then(response => response.json()).then(file => {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Juggernaut'));
