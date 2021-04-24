@@ -45,23 +45,28 @@ module.exports = {
         let encodedArgs;
         let utfEncodedArgs;
         var newArrayDataOfOjbect;
-        switch (args[(args.length) - 1]) {
-            case 'DM':
+
+        
+        
+
+
+        switch (args[(args.length) - 1].toLowerCase()) {
+
             case 'dm':
                 args[(args.length) - 1] = 'Darth';
                 args.push('Malgus');
                 break;
-            case 'SF':
+
             case 'sf':
                 args[(args.length) - 1] = 'Star';
                 args.push('Forge');
                 break;
-            case 'SS':
+
             case 'ss':
                 args[(args.length) - 1] = 'Satele';
                 args.push('Shan');
                 break;
-            case 'TL':
+
             case 'tl':
                 args[(args.length) - 1] = 'The';
                 args.push('Leviathan');
