@@ -1,8 +1,11 @@
+const emptyMsg='░░░░▄▄▄▄▀▀▀▀▀▀▀▀▄▄▄▄▄▄\n░░░░█░░░░▒▒▒▒▒▒▒▒▒▒▒▒░░▀▀▄\n░░░█░░░▒▒▒▒▒▒░░░░░░░░▒▒▒░░█\n░░█░░░░░░▄██▀▄▄░░░░░▄▄▄░░░█\n░▀▒▄▄▄▒░█▀▀▀▀▄▄█░░░██▄▄█░░░█\n█▒█▒▄░▀▄▄▄▀░░░░░░░░█░░░▒▒▒▒▒█\n█▒█░█▀▄▄░░░░░█▀░░░░▀▄░░▄▀▀▀▄▒█\n░█▀▄░█▄░█▀▄▄░▀░▀▀░▄▄▀░░░░█░░█\n░░█░░▀▄▀█▄▄░█▀▀▀▄▄▄▄▀▀█▀██░█\n░░░█░░██░░▀█▄▄▄█▄▄█▄████░█\n░░░░█░░░▀▀▄░█░░░█░███████░█\n░░░░░▀▄░░░▀▀▄▄▄█▄█▄█▄█▄▀░░\n░░░░░░░▀▄▄░▒▒▒▒░░░░░░░░░░█\n░░░░░░░░░░▀▀▄▄░▒▒▒▒▒▒▒▒▒▒░█\n░░░░░░░░░░░░░░▀▄▄▄▄▄░░░░░█';
 const fetch = require('node-fetch');
 const Discord = require('discord.js');
 const utf8 = require('utf8');
 const fonks = require('./fonks');
-const season = process.env.season;
+const seasonCurrent = process.env.seasonCurrent;
+const seasonThirteen=process.env.seasonThirteen;
+const season=[seasonCurrent,seasonThirteen];
 const imagesUrl = 'https://raw.githubusercontent.com/sinirzi/swtorleaderboard/main/images.json';
 const searchUrl = 'https://www.swtor.com/lb/search/';
 const getUrl = 'https://www.swtor.com/lb/get/';
@@ -13,6 +16,7 @@ const impLogo = 'http://pm1.narvii.com/6699/a004bf79c862b6c01070ce8a44551c9d9c3d
 const repLogo = 'https://images.alphacoders.com/300/thumb-1920-300681.jpg';
 const boardUrl = 'http://www.swtor.com/leaderboards/';
 const classUrl = 'http://www.swtor.com/leaderboards/class/';
+const sadge=''
 
 module.exports = {
     getRandomInt: function (number) {
@@ -51,13 +55,15 @@ module.exports = {
         }
         String1 += summary1[i].char_name + '  ' + summary1[i].rating + '  ' + summary1[i].class_name + '\n';
     }
+    if(String1==='')
+    return emptyMsg;
+    else
     return String1;
     },
 
-    embedSummary: function (topThreeGj, topThreeSm, topThreeSa, topThreeSs, topThreeVp, topThreeCm, topThreeGs,topThreeSo) {
+    embedSummary: function (topThreeGj, topThreeSm, topThreeSa, topThreeSs, topThreeVp, topThreeCm, topThreeGs,topThreeSo,isSolo) {
     const summEmbed = new Discord.MessageEmbed()
         .setColor('#0099ff')
-        .setTimestamp()
         .setFooter('' + footer+'', '' + footerUrl+'')
         .addFields(
             { name: 'GUARDIAN \u200B / \u200B JUGGERNAUT', value: '```' + topThreeGj + '```', inline: true },
@@ -75,7 +81,8 @@ module.exports = {
             { name: 'GUNSLINGER \u200B / \u200B SNIPER', value: '```' + topThreeGs + '```', inline: true },
             { name: 'SCOUNDREL \u200B / \u200B OPERATIVE', value: '```' + topThreeSo + '```', inline: true },
         );
-
+      //  isSolo ? summEmbed.setTitle('SOLO RANKED TOP3') : summEmbed.setTitle('TEAM RANKED TOP3')
+        summEmbed.setURL(''+ boardUrl+'')
         return summEmbed;
     },
 
@@ -195,6 +202,7 @@ module.exports = {
         const summEmbed = new Discord.MessageEmbed()
             .setColor('#0099ff')
             .setFooter('' + footer+'', '' + footerUrl+'')
+            .setURL(''+boardUrl+'')
             .addFields(
                 { name: 'GUARDIAN \u200B / \u200B JUGGERNAUT', value: '```' + summaryString[0]+ '```', inline: true },
                 { name: 'SENTINEL \u200B / \u200B MARAUDER', value: '```' + summaryString[1]+ '```', inline: true },
@@ -211,7 +219,8 @@ module.exports = {
                 { name: 'GUNSLINGER \u200B / \u200B SNIPER', value: '```' + summaryString[6]  + '```', inline: true },
                 { name: 'SCOUNDREL \u200B / \u200B OPERATIVE', value: '```' + summaryString[7]  + '```', inline: true },
             );
-            isSolo ? summEmbed.setDescription('SOLO RANKED') : summEmbed.setDescription('TEAM RANKED')
+            isSolo ? summEmbed.setTitle('SOLO RANKED') : summEmbed.setTitle('TEAM RANKED')
+           
 
         return summEmbed;
     },
@@ -231,6 +240,7 @@ module.exports = {
 
      summaryClassStringed:function(summary1) {
         var String = '';
+        var winsSpace='';
         for (i = 0; i < summary1.length; i++) {
             
             if ((summary1[i].char_name).length < 11) {
@@ -241,9 +251,15 @@ module.exports = {
                 summary1[i].char_name = (summary1[i].char_name).substr(0, 8);
                 summary1[i].char_name += '...';
             }
+            if((summary1[i].wins<10&&summary1[i].wins>=0))
+                winsSpace='    ';
+            else if((summary1[i].wins<100&&summary1[i].wins>=10))
+            winsSpace='   ';
+            else if((summary1[i].wins<1000&&summary1[i].wins>=100))
+            winsSpace='  ';
 
 
-                String += summary1[i].char_name + '  ' + summary1[i].rating + '  ' +summary1[i].shard_name + '\n';
+                String += summary1[i].char_name + '  ' + summary1[i].rating + '  '+'  ' + summary1[i].wins +winsSpace+summary1[i].shard_name + '\n';
         }
         return String;
     },
@@ -260,7 +276,7 @@ module.exports = {
             .setColor('#0099ff')
         if (topThree[0] === undefined) {
             exampleEmbed.setThumbnail(''+thumbUrl+'')
-            exampleEmbed.setDescription("no one has 160wins yet")
+            exampleEmbed.setDescription("NO ONE IS TOP3 YET")
         }
         else if (empire.includes(adClassName))
             exampleEmbed.setThumbnail('' +impLogo+'')

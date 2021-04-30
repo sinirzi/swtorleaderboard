@@ -1,11 +1,11 @@
 module.exports = {
     Sr: require('./sr'),
-    Tr: require('./tr'),
-    Top3: require('./top3sr'),
+    Top3: require('./top3'),
     Summary: require('./summary'),
     Help: require('./help'),
-    Top3tr: require('./top3tr'),
     history: require('./history'),
     test: require('./test'),
-    reactions: require('./reactions'),
+    top3sr: require('./top3sr'),
+    top3tr: require('./top3tr'),
+
 };

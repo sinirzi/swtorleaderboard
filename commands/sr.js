@@ -3,7 +3,9 @@ const Discord = require('discord.js');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const utf8 = require('utf8');
 const fonks = require('./fonks');
-const season = process.env.season;
+const seasonCurrent = process.env.seasonCurrent;
+const seasonThirteen=process.env.seasonThirteen;
+const season=[seasonCurrent,seasonThirteen];
 const imagesUrl = 'https://raw.githubusercontent.com/sinirzi/swtorleaderboard/main/images.json';
 const searchUrl = 'https://www.swtor.com/lb/search/';
 const getUrl = 'https://www.swtor.com/lb/get/';
@@ -18,6 +20,7 @@ module.exports = {
     name: '.sr',
     description: 'Solo Ranked Rating !',
    async execute(msg, args) {
+       console.log('sr command called: ',args)
        var errorMsg;
         const srEmoji = '1️⃣';
         const trEmoji = '2️⃣';
@@ -46,8 +49,9 @@ module.exports = {
         let utfEncodedArgs;
         var newArrayDataOfOjbect;
 
-        
-        
+        if(args[0]==undefined)
+        msg.reply("WATTAFAK")
+
 
 
         switch (args[(args.length) - 1].toLowerCase()) {
@@ -71,6 +75,11 @@ module.exports = {
                 args[(args.length) - 1] = 'The';
                 args.push('Leviathan');
                 break;
+                case 'th':
+                    args[(args.length) - 1] = 'Tulak';
+                    args.push('Hord');
+                    break;
+
         };
         if (args.length === 4) {
             j = 2;
@@ -99,7 +108,7 @@ module.exports = {
                 errorMsg=fonks.embedError();
                 msg.reply(errorMsg);
             }
-        }).then(response => fetch(getUrl + searchFile[i].character_id + '?season=' +season+'')).then(response => response.json()).then(data => {
+        }).then(response => fetch(getUrl + searchFile[i].character_id + '?season=' +season[0]+'')).then(response => response.json()).then(data => {
             ranked = data;
             className = ranked.class_name;
             charName = ranked.char_name;
@@ -142,7 +151,9 @@ module.exports = {
                 .setColor('#0099ff')
                 .setTitle('SOLO RANKED')
                 .setURL('' + boardUrl+'')
-                .addFields(
+                .setFooter('Developed by Furkai#0331 ', '' + footerUrl + '');
+                if(soloRating!==undefined){
+                SrEmbed.addFields(
                     { name: 'Rank'  , value: soloRank, inline: true },
                     { name: 'Rating', value: soloRating, inline: true },
                     { name: 'Server', value: shardName, inline: true },
@@ -150,7 +161,10 @@ module.exports = {
                     { name: 'Wins'  , value: soloWins, inline: true },
                     { name: 'Class' , value: className, inline: true },
                 )
-                .setFooter('Developed by Furkai#0331 ', '' + footerUrl + '');
+                }
+                else
+                SrEmbed.setDescription(charName+' didn´t play any team ranked games.')
+                
             x = fonks.getRandomInt(22);
             SrEmbed.setImage('' + randomImages["images"][x] + '')
             SrEmbed.setAuthor(charName, '' + randomImages["imagesAdvancedClass"][0][className] + '', charUrl + searchFile[0].character_id)
@@ -160,7 +174,9 @@ module.exports = {
                 .setColor('#0099ff')
                 .setTitle('TEAM RANKED')
                 .setURL('' + boardUrl + '')
-                .addFields(
+                .setFooter('Developed by Furkai#0331 ', '' + footerUrl + '');
+                if(groupRating!==undefined){
+                    TrEmbed .addFields(
                     { name: 'Rank', value: groupRank, inline: true },
                     { name: 'Rating', value: groupRating, inline: true },
                     { name: 'Server', value: shardName, inline: true },
@@ -168,8 +184,15 @@ module.exports = {
                     { name: 'Wins', value: groupWins, inline: true },
                     { name: 'Class', value: className, inline: true },
                 )
-                .setFooter('Developed by Furkai#0331 ', '' + footerUrl + '');
+                }
+                else
+                TrEmbed.setDescription(charName+' didn`t play any team ranked games.')
+                
+                
             x = fonks.getRandomInt(22);
+            if(groupRating===undefined)
+            TrEmbed.setImage('' + randomImages["images"][x] + '')
+            else
             TrEmbed.setImage('' + randomImages["images"][x] + '')
             TrEmbed.setAuthor(charName, '' + randomImages["imagesAdvancedClass"][0][className] + '', charUrl + searchFile[0].character_id)
 
@@ -186,13 +209,12 @@ module.exports = {
                return [srEmoji, trEmoji].includes(reaction.emoji.name) && user.id === msg.author.id;
            };
            
-           const collector = chooseEmbed.createReactionCollector(filter,{time:20000});
+           const collector = chooseEmbed.createReactionCollector(filter,{time:30000});
            
            collector.on('collect', (reaction, user) => {
                if(reaction.emoji.name==srEmoji){
                 x = fonks.getRandomInt(22);
                 y=fonks.getRandomInt(7);
-                console.log(y)
                 if(soloRating==1){
                 SrEmbed.setImage('' + randomImages["imagesShame"][y] + '')
                 }

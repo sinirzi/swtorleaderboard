@@ -8,6 +8,7 @@ module.exports = {
     name: '.help',
 
     execute(msg, args) {
+        console.log('help command called: ',args)
       /*  switch (args[0]) {
             case undefined:
                 embedHelp();
@@ -24,7 +25,6 @@ module.exports = {
         }*/
             const embedCommands = new Discord.MessageEmbed()
                 .setTitle('BOT COMMANDS')
-                .setTimestamp()
                 .setFooter('Furkai#0331 for feedbacks,suggestions and bugs', 'https://static-cdn.jtvnw.net/emoticons/v2/435279/default/dark/1.0')
                 .setColor('#0099ff')
 
@@ -32,9 +32,9 @@ module.exports = {
 
 
                 .addFields(
-                    { name: '<:one:821889136947363861> search', value: '```.sr CharacterName ServerName (Example: .sr Furkai dm)\n ```', inline: true },
-                    { name: '<:two:821889263024472094> top3', value: '```brings the real top3s of each advanced class(160wins and above)\n.top3sr/.top3tr AdvancedClassName (Example: .top3sr merc)\n  \n .top3sr/.top3tr all : summary style real top3s of all advanced classes  ```', inline: true },
-                    { name: '<:three:821889275724431360> summary', value: '```.summary ```', inline: true },
+                    { name: '<:one:821889136947363861> search', value: '```.sr CharacterName ServerName \n Example: .sr furkai dm ```', inline: false },
+                    { name: '<:two:821889263024472094> top3', value: '``` .top3 sr\n .top3 tr\n .top3sr/tr all\n .top3sr/tr className\n  Example: .top3sr sco  ```', inline: false },
+                    { name: '<:three:821889275724431360> summary', value: '```.summary \n.summary sr className\n Example: .summary sr slinger ```', inline: false },
                 );
             msg.reply(embedCommands);
 

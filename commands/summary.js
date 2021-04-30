@@ -2,7 +2,9 @@ const fetch = require('node-fetch');
 const Discord = require('discord.js');
 const fonks = require('./fonks');
 const QuickChart = require('quickchart-js');
-const season = process.env.season;
+const seasonCurrent = process.env.seasonCurrent;
+const seasonThirteen=process.env.seasonThirteen;
+const season=[seasonCurrent,seasonThirteen];
 const imagesUrl = 'https://raw.githubusercontent.com/sinirzi/swtorleaderboard/main/images.json';
 const searchUrl = 'https://www.swtor.com/lb/search/';
 const getUrl = 'https://www.swtor.com/lb/get/';
@@ -18,6 +20,7 @@ module.exports = {
     name: '.summary',
 
    async execute(msg, args) {
+    console.log('summary command called: ',args)
     const srEmoji = '1️⃣';
     const trEmoji = '2️⃣';
         var objectArrayValues;
@@ -47,6 +50,7 @@ module.exports = {
                         .setDescription(''
                         + srEmoji+' SR  \u200B\u200B\u200B\u200B\u200B\u200B'
                             +  trEmoji+ 'TR')
+                            .setImage('https://wallpapercave.com/wp/0aK4XTd.jpg')
                             .setFooter('Developed by Furkai#0331 ', '' + footerUrl + '');
 if(args[0]===undefined)
         msg.channel.send(chooseEmbed).then(chooseEmbed =>{
@@ -65,7 +69,7 @@ if(args[0]===undefined)
            
 
        
-            fetch('http://www.swtor.com/lb/top?season=13').then(response => response.json()).then(file => {
+            fetch('http://www.swtor.com/lb/top?season='+season[0]+'').then(response => response.json()).then(file => {
                 summary = fonks.summaryClassed(file);
                 summaryJugg = Object.values(summary[0]);
                 summaryMara = Object.values(summary[1]);
@@ -83,7 +87,7 @@ if(args[0]===undefined)
                    }
 
 
-            }).then(response =>fetch('http://www.swtor.com/lb/top?group=true&season=13')).then(response => response.json()).then(file => {
+            }).then(response =>fetch('http://www.swtor.com/lb/top?group=true&season='+season[0]+'')).then(response => response.json()).then(file => {
                 summary = fonks.summaryClassed(file);
                 summaryJugg = Object.values(summary[0]);
                 summaryMara = Object.values(summary[1]);
@@ -112,7 +116,7 @@ if(args[0]===undefined)
         
 
         if (args[0] == 'sr' && args[1] == 'sin' || args[1] === 'Asssassin' || args[1] === 'assassin'  || args[1] === 'Shadow' || args[1] === 'shadow') {
-    fetch('http://www.swtor.com/lb/data?page=1&class=shadow-assassin&column=pvp_ranked_solo&season=13').then(response => response.json()).then(file => {
+    fetch('http://www.swtor.com/lb/data?page=1&class=shadow-assassin&column=pvp_ranked_solo&season='+season[0]+'').then(response => response.json()).then(file => {
         summary = Object.values(file.data);
         summarySin = summary.filter(summary => summary.class_name === 'Assassin');
         summaryShadow = summary.filter(summary => summary.class_name === 'Shadow');
@@ -133,7 +137,7 @@ if(args[0]===undefined)
     });
         }
         if (args[0] == 'sr' && args[1] == 'sorc' || args[1] === 'sorcerer' || args[1] === 'Sorcerer' || args[1] === 'sage' || args[1] === 'Sage') {
-            fetch('http://www.swtor.com/lb/data?page=1&class=sage-sorcerer&column=pvp_ranked_solo&season=13').then(response => response.json()).then(file => {
+            fetch('http://www.swtor.com/lb/data?page=1&class=sage-sorcerer&column=pvp_ranked_solo&season='+season[0]+'').then(response => response.json()).then(file => {
                 summary = Object.values(file.data);
                 summarySorc = summary.filter(summary => summary.class_name === 'Sorcerer');
                 summarySage = summary.filter(summary => summary.class_name === 'Sage');
@@ -154,7 +158,7 @@ if(args[0]===undefined)
             });
         }
         if (args[0] == 'sr' && args[1] == 'merc' || args[1] === 'mercenary' || args[1] === 'mando' || args[1] === 'commando') {
-            fetch('http://www.swtor.com/lb/data?page=1&class=comando-mercenary&column=pvp_ranked_solo&season=13').then(response => response.json()).then(file => {
+            fetch('http://www.swtor.com/lb/data?page=1&class=comando-mercenary&column=pvp_ranked_solo&season='+season[0]+'').then(response => response.json()).then(file => {
                 summary = Object.values(file.data);
                 summaryMerc = summary.filter(summary => summary.class_name === 'Mercenary');
                 summaryCommando = summary.filter(summary => summary.class_name === 'Commando');
@@ -175,7 +179,7 @@ if(args[0]===undefined)
             });
         }
         if (args[0] == 'sr' && args[1] == 'jugg' || args[1] === 'juggernaut' || args[1] === 'guardian' || args[1] === 'Guardian') {
-            fetch('http://www.swtor.com/lb/data?page=1&class=guardian-juggernaut&column=pvp_ranked_solo&season=13').then(response => response.json()).then(file => {
+            fetch('http://www.swtor.com/lb/data?page=1&class=guardian-juggernaut&column=pvp_ranked_solo&season='+season[0]+'').then(response => response.json()).then(file => {
                 summary = Object.values(file.data);
                 summaryJugg = summary.filter(summary => summary.class_name === 'Juggernaut');
                 summaryGuardian = summary.filter(summary => summary.class_name === 'Guardian');
@@ -196,7 +200,7 @@ if(args[0]===undefined)
             });
         }
         if (args[0] == 'sr' && args[1] == 'mara' || args[1] === 'marauder' || args[1] === 'sent' || args[1] === 'sentinel') {
-            fetch('http://www.swtor.com/lb/data?page=1&class=sentinel-marauder&column=pvp_ranked_solo&season=13').then(response => response.json()).then(file => {
+            fetch('http://www.swtor.com/lb/data?page=1&class=sentinel-marauder&column=pvp_ranked_solo&season='+season[0]+'').then(response => response.json()).then(file => {
                 summary = Object.values(file.data);
                 summaryMara = summary.filter(summary => summary.class_name === 'Marauder');
                 summarySent = summary.filter(summary => summary.class_name === 'Sentinel');
@@ -217,7 +221,7 @@ if(args[0]===undefined)
             });
         }
         if (args[0] == 'sr' && args[1] == 'vg' || args[1] === 'vanguard' || args[1] === 'pt' || args[1] === 'powertech') {
-            fetch('http://www.swtor.com/lb/data?page=1&class=vanguard-powertech&column=pvp_ranked_solo&season=13').then(response => response.json()).then(file => {
+            fetch('http://www.swtor.com/lb/data?page=1&class=vanguard-powertech&column=pvp_ranked_solo&season='+season[0]+'').then(response => response.json()).then(file => {
                 summary = Object.values(file.data);
                 summaryVg = summary.filter(summary => summary.class_name === 'Vanguard');
                 summaryPt = summary.filter(summary => summary.class_name === 'Powertech');
@@ -238,7 +242,7 @@ if(args[0]===undefined)
             });
         }
         if (args[0] == 'sr' && args[1] == 'slinger' || args[1] === 'gunslinger' || args[1] === 'sniper' || args[1] === 'Sniper') {
-            fetch('http://www.swtor.com/lb/data?page=1&class=gunslinger-sniper&column=pvp_ranked_solo&season=13').then(response => response.json()).then(file => {
+            fetch('http://www.swtor.com/lb/data?page=1&class=gunslinger-sniper&column=pvp_ranked_solo&season='+season[0]+'').then(response => response.json()).then(file => {
                 summary = Object.values(file.data);
                 summarySniper = summary.filter(summary => summary.class_name === 'Sniper');
                 summarySlinger = summary.filter(summary => summary.class_name === 'Gunslinger');
@@ -259,7 +263,7 @@ if(args[0]===undefined)
             });
         }
         if (args[0] == 'sr' && args[1] == 'oper' || args[1] === 'operative' || args[1] === 'sco' || args[1] === 'scoundrel') {
-            fetch('http://www.swtor.com/lb/data?page=1&class=scoundrel-operative&column=pvp_ranked_solo&season=13').then(response => response.json()).then(file => {
+            fetch('http://www.swtor.com/lb/data?page=1&class=scoundrel-operative&column=pvp_ranked_solo&season='+season[0]+'').then(response => response.json()).then(file => {
                 summary = Object.values(file.data);
                 summaryOper = summary.filter(summary => summary.class_name === 'Operative');
                 summarySco = summary.filter(summary => summary.class_name === 'Scoundrel');
