@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const Discord = require('discord.js');
+const QuickChart = require('quickchart-js');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const utf8 = require('utf8');
 const fonks = require('./fonks');
@@ -22,8 +23,10 @@ module.exports = {
    async execute(msg, args) {
        console.log('sr command called: ',args)
        var errorMsg;
+       var newArray = []; 
         const srEmoji = '1️⃣';
         const trEmoji = '2️⃣';
+        const graphEmoji='📈';
         let randomImages = [];
         let republic = ['Shadow','Guardian','Sentinel','Sage','Vanguard','Commando','Gunslinger','Scoundrel'];
         let empire = ['Assassin','Juggernaut','Marauder','Sorcerer','Powertech','Mercenary','Sniper','Operative'];
@@ -109,6 +112,7 @@ module.exports = {
                 msg.reply(errorMsg);
             }
         }).then(response => fetch(getUrl + searchFile[i].character_id + '?season=' +season[0]+'')).then(response => response.json()).then(data => {
+            console.log(getUrl + searchFile[i].character_id + '?season=' +season[0]+'')
             ranked = data;
             className = ranked.class_name;
             charName = ranked.char_name;
@@ -125,20 +129,63 @@ module.exports = {
             soloHistory= ranked.solo_history;
         }).then(response => fetch(imagesUrl)).then(response => response.json()).then(data => {
             randomImages = data;
+            newArray = ranked.solo_history; //solo history
             var x;
             var y;
+            for (i = 0; i < newArray.length - 1; i++) {
+
+                if (newArray[i].DATE_CHANGED === newArray[i + 1].DATE_CHANGED) {
+                    newArray.splice(i, 1);
+                    i--;
+                }
+            }
+         
+            const dataSetsDates =[];
+            const dataSets = [];
+            for (let i = 0; i < newArray.length; i++) {
+                dataSetsDates.push(newArray[i].DATE_CHANGED); 
+              }
+            for (let i = 0; i < newArray.length; i++) {
+                dataSets.push(newArray[i].PVP_RANKED_RANK); 
+              }
+            const myChart = new QuickChart();
+            myChart
+                .setConfig({
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                 //   suggestedMin: 1200,
+                                   // stepSize: 1,
+                                }
+                            }]
+                        }
+                    },
+                    type: 'line',
+                    data: {
+                        labels: dataSetsDates,
+                        datasets: [{
+                            label: 'SOLO RANKED',
+                            data: dataSets,
+                            lineTension: 0.5
+                        }]
+                      },
+                })
+                .setWidth(800)
+                .setHeight(400)
+                .setBackgroundColor('transparent');
+                
+              var   url= myChart.getUrl()
+
+
 
             const chooseEmbed = new Discord.MessageEmbed()
             .setColor('0099ff')
                         .setTitle('Ranked Warzone Arena Leaderboards')
                         .setDescription(''
                         + srEmoji+' SR  \u200B\u200B\u200B\u200B\u200B\u200B'
-                            +  trEmoji+ 'TR')
-                            x = fonks.getRandomInt(22);
-                            if(charName==='Lizzbet'){
-                                chooseEmbed.setImage('https://i.gyazo.com/996071a78aa342284c4ed18d08b381a1.png')
-                            }
-                            else
+                            +  trEmoji+ 'TR' +graphEmoji+'sr graph')
+                            x = fonks.getRandomInt(22)
                             chooseEmbed.setImage('' + randomImages["images"][x] + '')
                             chooseEmbed.setAuthor(charName, '' + randomImages["imagesAdvancedClass"][0][className] + '', charUrl + searchFile[0].character_id)
                             .setFooter('Developed by Furkai#0331 ', '' + footerUrl + '');
@@ -202,14 +249,14 @@ module.exports = {
 
              msg.channel.send(chooseEmbed).then(chooseEmbed =>{
                  
-            chooseEmbed.react(srEmoji).then(() => chooseEmbed.react(trEmoji));
+            chooseEmbed.react(srEmoji).then(() => chooseEmbed.react(trEmoji)).then(() => chooseEmbed.react(graphEmoji));
            
    
            const filter = (reaction, user) => {
-               return [srEmoji, trEmoji].includes(reaction.emoji.name) && user.id === msg.author.id;
+               return [srEmoji, trEmoji,graphEmoji].includes(reaction.emoji.name) && user.id === msg.author.id;
            };
            
-           const collector = chooseEmbed.createReactionCollector(filter,{time:30000});
+           const collector = chooseEmbed.createReactionCollector(filter,{time:40000});
            
            collector.on('collect', (reaction, user) => {
                if(reaction.emoji.name==srEmoji){
@@ -234,6 +281,15 @@ module.exports = {
                reaction.users.remove(user.id);
 
                }
+               if(reaction.emoji.name==graphEmoji){
+               
+                SrEmbed.setImage(''+url+'')
+               
+                chooseEmbed.edit(SrEmbed)
+               reaction.users.remove(user.id);
+
+               }
+
            });
            
            collector.on('end', (reaction, user) => {
@@ -244,6 +300,10 @@ module.exports = {
    
    
        });
+
+
+
+
 
 
 

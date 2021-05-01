@@ -264,6 +264,23 @@ module.exports = {
         return String;
     },
 
+    top3Stringed:function(summary1) {
+        var String1 = '';
+        for (i = 0; i < summary1.length; i++) {
+            if ((summary1[i].char_name).length < 11) {
+                summary1[i].char_name += ' '.repeat(11 - (summary1[i].char_name).length)
+            }
+            else if ((summary1[i].char_name).length > 11) {
+                summary1[i].char_name = (summary1[i].char_name).slice(0, 11);
+                summary1[i].char_name = (summary1[i].char_name).substr(0, 8);
+                summary1[i].char_name += '...';
+            }
+            String1 += summary1[i].char_name + '  ' + summary1[i].rating + '  ' + summary1[i].class_name + '\n';
+        }
+        return String1;
+
+    },
+
      embedDataset:function(className,topThree) {
         let randomImages = [];
         let republic = ['Shadow', 'Guardian', 'Sentinel', 'Sage', 'Vanguard', 'Commando', 'Gunslinger', 'Scoundrel'];

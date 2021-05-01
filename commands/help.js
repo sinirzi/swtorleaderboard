@@ -34,7 +34,8 @@ module.exports = {
                 .addFields(
                     { name: '<:one:821889136947363861> search', value: '```.sr CharacterName ServerName \n Example: .sr furkai dm ```', inline: false },
                     { name: '<:two:821889263024472094> top3', value: '``` .top3 sr\n .top3 tr\n .top3sr/tr all\n .top3sr/tr className\n  Example: .top3sr sco  ```', inline: false },
-                    { name: '<:three:821889275724431360> summary', value: '```.summary \n.summary sr className\n Example: .summary sr slinger ```', inline: false },
+                    { name: '<:three:821889275724431360> summary', value: '```.summary \n.summary sr/tr className\n Example: .summary sr slinger ```', inline: false },
+                  //  { name: ':four: history', value: '```.history CharacterName ServerName  ```', inline: false },
                 );
             msg.reply(embedCommands);
 

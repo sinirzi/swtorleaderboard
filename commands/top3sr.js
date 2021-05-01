@@ -4,7 +4,7 @@ const utf8 = require('utf8');
 const fonks = require('./fonks');
 const seasonCurrent = process.env.seasonCurrent;
 const seasonThirteen=process.env.seasonThirteen;
-const season=[seasonCurrent,seasonThirteen];
+const season=[seasonCurrent,14];
 const imagesUrl = 'https://raw.githubusercontent.com/sinirzi/swtorleaderboard/main/images.json';
 const searchUrl = 'https://www.swtor.com/lb/search/';
 const getUrl = 'https://www.swtor.com/lb/get/';
@@ -63,8 +63,7 @@ module.exports = {
                     topThreeShadow = topThreeSa.filter((topThree => topThree.class_name === 'Shadow')).filter((topThree, index) => index < 3);
                     topThreeSa = topThreeSin.concat(topThreeShadow);
                     topThreeSa = fonks.calcTopThree(topThreeSa);
-                   topThreeSa = fonks.summaryStringed(topThreeSa);
-                   console.log('sa:',topThreeSa);
+                    topThreeSa = fonks.top3Stringed(topThreeSa);
                 }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=sage-sorcerer&column=pvp_ranked_solo&season=' +  season[1] +'')).then(response => response.json()).then(file => {
                     var  ssArrayDataOfObject = Object.values(file.data);
                     topThreeSs = fonks.calcTopThree(ssArrayDataOfObject);
@@ -72,7 +71,7 @@ module.exports = {
                     topThreeSage = topThreeSs.filter((topThree => topThree.class_name === 'Sage')).filter((topThree, index) => index < 3);
                     topThreeSs = topThreeSorc.concat(topThreeSage);
                     topThreeSs = fonks.calcTopThree(topThreeSs);
-                    topThreeSs = fonks.summaryStringed(topThreeSs);
+                    topThreeSs = fonks.top3Stringed(topThreeSs);
                 }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=vanguard-powertech&column=pvp_ranked_solo&season=' +  season[1] +'')).then(response => response.json()).then(file => {
                     var vpArrayDataOfObject = Object.values(file.data);
                     topThreeVp = fonks.calcTopThree(vpArrayDataOfObject);
@@ -80,7 +79,7 @@ module.exports = {
                     topThreePt = topThreeVp.filter((topThree => topThree.class_name === 'Powertech')).filter((topThree, index) => index < 3);
                     topThreeVp = topThreeVg.concat(topThreePt);
                     topThreeVp = fonks.calcTopThree(topThreeVp);
-                    topThreeVp = fonks.summaryStringed(topThreeVp);
+                    topThreeVp = fonks.top3Stringed(topThreeVp);
                 }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=comando-mercenary&column=pvp_ranked_solo&season=' +  season[1] +'')).then(response => response.json()).then(file => {
                     var  cmArrayDataOfObject = Object.values(file.data);
                     topThreeCm = fonks.calcTopThree(cmArrayDataOfObject);
@@ -88,7 +87,7 @@ module.exports = {
                     topThreeMerc = topThreeCm.filter((topThree => topThree.class_name === 'Mercenary')).filter((topThree, index) => index < 3);
                     topThreeCm = topThreeComm.concat(topThreeMerc);
                     topThreeCm = fonks.calcTopThree(topThreeCm);
-                    topThreeCm = fonks.summaryStringed(topThreeCm);
+                    topThreeCm = fonks.top3Stringed(topThreeCm);
                 }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=gunslinger-sniper&column=pvp_ranked_solo&season=' +  season[1] +'')).then(response => response.json()).then(file => {
                     var  gsArrayDataOfObject = Object.values(file.data);
                     topThreeGs = fonks.calcTopThree(gsArrayDataOfObject);
@@ -96,7 +95,7 @@ module.exports = {
                     topThreeSnip = topThreeGs.filter((topThree => topThree.class_name === 'Sniper')).filter((topThree, index) => index < 3);
                     topThreeGs = topThreeGslinger.concat(topThreeSnip);
                     topThreeGs = fonks.calcTopThree(topThreeGs);
-                    topThreeGs = fonks.summaryStringed(topThreeGs);
+                    topThreeGs = fonks.top3Stringed(topThreeGs);
                 }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=scoundrel-operative&column=pvp_ranked_solo&season=' +  season[1] +'')).then(response => response.json()).then(file => {
                     var  soArrayDataOfObject = Object.values(file.data);
                     topThreeSo = fonks.calcTopThree(soArrayDataOfObject);
@@ -104,7 +103,7 @@ module.exports = {
                     topThreeOper = topThreeSo.filter((topThree => topThree.class_name === 'Operative')).filter((topThree, index) => index < 3);
                     topThreeSo = topThreeSco.concat(topThreeOper);
                     topThreeSo = fonks.calcTopThree(topThreeSo);
-                    topThreeSo = fonks.summaryStringed(topThreeSo);
+                    topThreeSo = fonks.top3Stringed(topThreeSo);
                 }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=sentinel-marauder&column=pvp_ranked_solo&season=' +  season[1] +'')).then(response => response.json()).then(file => {
                     var  smArrayDataOfObject = Object.values(file.data);
                     topThreeSm = fonks.calcTopThree(smArrayDataOfObject);
@@ -112,7 +111,7 @@ module.exports = {
                     topThreeMara = topThreeSm.filter((topThree => topThree.class_name === 'Marauder')).filter((topThree, index) => index < 3);
                     topThreeSm = topThreeSent.concat(topThreeMara);
                     topThreeSm = fonks.calcTopThree(topThreeSm);
-                    topThreeSm = fonks.summaryStringed(topThreeSm);
+                    topThreeSm = fonks.top3Stringed(topThreeSm);
                 }).then(response => fetch('http://www.swtor.com/lb/data?page=1&class=guardian-juggernaut&column=pvp_ranked_solo&season=' +  season[1] +'')).then(response => response.json()).then(file => {
                   var  gjArrayDataOfObject = Object.values(file.data);
                     topThreeGj = fonks.calcTopThree(gjArrayDataOfObject);
@@ -120,7 +119,7 @@ module.exports = {
                     topThreeJugg = topThreeGj.filter((topThree => topThree.class_name === 'Juggernaut')).filter((topThree, index) => index < 3);
                     topThreeGj = topThreeGuardian.concat(topThreeJugg);
                     topThreeGj = fonks.calcTopThree(topThreeGj);
-                    topThreeGj = fonks.summaryStringed(topThreeGj);
+                    topThreeGj = fonks.top3Stringed(topThreeGj);
                     summEmbed= fonks.embedSummary(topThreeGj, topThreeSm, topThreeSa, topThreeSs, topThreeVp, topThreeCm, topThreeGs, topThreeSo);
                     msg.reply(summEmbed);
                 });         
@@ -130,7 +129,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Shadow')).filter((topThree, index) => index < 3);
-                    embedDataset('shadow-assassin');
+                    embedDataset('shadow-assassin','Shadow');
 
                 });
                 break;
@@ -140,7 +139,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Assassin')).filter((topThree, index) => index < 3);
-                    embedDataset('shadow-assassin');
+                    embedDataset('shadow-assassin','Assassin');
 
                 });
                 break;
@@ -149,7 +148,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Sage')).filter((topThree, index) => index < 3);
-                    embedDataset('sage-sorcerer');
+                    embedDataset('sage-sorcerer','Sage');
                 });
                 break;
             case 'sorc':
@@ -158,7 +157,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Sorcerer')).filter((topThree, index) => index < 3);
-                    embedDataset('sage-sorcerer');
+                    embedDataset('sage-sorcerer','Sorcerer');
                 });
                 break;
             case 'vg':
@@ -167,7 +166,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Vanguard')).filter((topThree, index) => index < 3);
-                    embedDataset('vanguard-powertech');
+                    embedDataset('vanguard-powertech','Vanguard');
                 });
                 break;
             case 'pt':
@@ -176,7 +175,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Powertech')).filter((topThree, index) => index < 3);
-                    embedDataset('vanguard-powertech');
+                    embedDataset('vanguard-powertech','Powertech');
                 });
                 break;
             case 'mando':
@@ -185,7 +184,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Commando')).filter((topThree, index) => index < 3);
-                    embedDataset('comando-mercenary');
+                    embedDataset('comando-mercenary','Commando');
                 });
                 break;
             case 'merc':
@@ -194,7 +193,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Mercenary')).filter((topThree, index) => index < 3);
-                    embedDataset('comando-mercenary');
+                    embedDataset('comando-mercenary','Mercenary');
                 });
                 break;
             case 'slinger':
@@ -203,7 +202,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Gunslinger')).filter((topThree, index) => index < 3);
-                    embedDataset('gunslinger-sniper');
+                    embedDataset('gunslinger-sniper','Gunslinger');
                 });
                 break;
             case 'snip':
@@ -212,7 +211,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Sniper')).filter((topThree, index) => index < 3);
-                    embedDataset('gunslinger-sniper');
+                    embedDataset('gunslinger-sniper','Sniper');
                 });
                 break;
             case 'sco':
@@ -221,7 +220,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Scoundrel')).filter((topThree, index) => index < 3);
-                    embedDataset('scoundrel-operative');
+                    embedDataset('scoundrel-operative','Scoundrel');
                 });
                 break;
             case 'oper':
@@ -230,7 +229,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Operative')).filter((topThree, index) => index < 3);   
-                    embedDataset('scoundrel-operative');
+                    embedDataset('scoundrel-operative','Operative');
                 });
                 break;
             case 'sent':
@@ -239,7 +238,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Sentinel')).filter((topThree, index) => index < 3);
-                    embedDataset('sentinel-marauder');
+                    embedDataset('sentinel-marauder','Sentinel');
                 });
                 break;
             case 'mara':
@@ -248,7 +247,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Marauder')).filter((topThree, index) => index < 3);
-                    embedDataset('sentinel-marauder');
+                    embedDataset('sentinel-marauder','Marauder');
                 });
                 break;
             case 'guardian':
@@ -256,7 +255,7 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Guardian')).filter((topThree, index) => index < 3);
-                    embedDataset('guardian-juggernaut');
+                    embedDataset('guardian-juggernaut','Guardian');
                 });
                 break;
             case 'jugg':
@@ -265,21 +264,30 @@ module.exports = {
                     newArrayDataOfOjbect = Object.values(file.data);
                     topThree = fonks.calcTopThree(newArrayDataOfOjbect);
                     topThree = topThree.filter((topThree => topThree.class_name === 'Juggernaut')).filter((topThree, index) => index < 3);
-                    embedDataset('guardian-juggernaut');
+                    embedDataset('guardian-juggernaut','Juggernaut');
                 });
                 break;
         }
-        function embedDataset(className) {
-
+        function embedDataset(className,ClassNameAdvc) {
+           
             fetch(imagesUrl).then(response => response.json()).then(data => {
                 randomImages = data;
+                if(topThree[0]!==undefined)
                 var adClassName=topThree[0].class_name;
             const exampleEmbed = new Discord.MessageEmbed()
+            
                 .setColor('#0099ff')
-            if (topThree[0] === undefined) {
-                exampleEmbed.setThumbnail(''+thumbUrl+'')
-                exampleEmbed.setDescription("no one has 160wins yet")
-            }
+                if (topThree[0] === undefined) {
+                    var advcClassImg = randomImages["imagesAdvancedClass"][1][ClassNameAdvc];
+                    empire.includes(ClassNameAdvc) ? exampleEmbed.setThumbnail('' +impLogo+'') : exampleEmbed.setThumbnail('' + repLogo + '')
+                    exampleEmbed.setDescription(`THERE IS NO TOP3 ${ClassNameAdvc} `)
+                    exampleEmbed.setImage('' + advcClassImg+'')
+                    if(ClassNameAdvc=='Mercenary')
+                    exampleEmbed .setFooter('Developed by Furkai#0331, Arts: u/Greenecowpoke on reddit', ''+footerUrl+'');
+                    else
+                    exampleEmbed .setFooter('Developed by Furkai#0331', ''+footerUrl+'');
+
+                }
             else if (empire.includes(adClassName))
                 exampleEmbed.setThumbnail('' +impLogo+'')
             else if (republic.includes(adClassName))
@@ -301,7 +309,7 @@ module.exports = {
                 exampleEmbed.setURL('' + classUrl+'' + className)
             }
             else {
-                exampleEmbed.setTitle('SOLO RANKED' + ' ' + '          TOP3 ' + args[0] + topThree[0].class_name)
+                exampleEmbed.setTitle('SOLO RANKED' + ' ' + '          TOP3 ' +ClassNameAdvc)
                 exampleEmbed.setURL('' + classUrl+'' + className)
             }
             msg.reply(exampleEmbed);
